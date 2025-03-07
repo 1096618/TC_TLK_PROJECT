@@ -1,9 +1,26 @@
+# -----------------------------------------------------------------------------
+# Name:        Guess the Number
+# Purpose:     Write a program that generates a random number between 1 and 10 and keeps asking the user to guess it using a while loop until they guess correctly.
+#
+# Author:      TC
+# Created:     March 7, 2025
+# -----------------------------------------------------------------------------
+
+#Import random module
 import random
+
+#===============================EASY===========================================#
+#Define guess the number EASY mode function
 def gtneasy():
 
+    #Store a with random integer number within 0 and 10
     a = random.randint(0, 10)
-#    print(a)
+
+    #print(a) #Reveal secret number line for quick testing
+    #Set a counter as a variable to keep count of guesses
     counter = 0
+
+    #Loop until found correct number
     while True:
         guess = int(input("Guess a number between 0 and 10: "))
         if guess == a:
@@ -21,10 +38,11 @@ def gtneasy():
             print("Cold")
             counter += 1
 
+#===============================MEDIUM===========================================#
 def gtnmedium():
 
     a = random.randint(0, 100)
-#    print(a)
+    #print(a)
     counter = 0
     while True:
         guess = int(input("Guess a number between 0 and 100: "))
@@ -46,10 +64,11 @@ def gtnmedium():
             print("Cold")
             counter += 1
 
+#===============================HARD===========================================#
 def gtnhard():
 
     a = random.randint(0, 1000)
-#    print(a)
+    #print(a)
     counter = 0
     while True:
         guess = int(input("Guess a number between 0 and 1000: "))
@@ -77,7 +96,7 @@ def gtnhard():
             print("Cold")
             counter += 1
 
-
+#===============================INPUT COMMAND===========================================#
 while True:
     gamemode = input("What difficulty do you want to play (easy/medium/hard): ").lower()
     if gamemode == "easy":
@@ -92,4 +111,4 @@ while True:
     again = input("Do you want to play again? (y/n): ").lower()
     if again == "n":
         break
-
+#=======================================================================================#

@@ -21,6 +21,7 @@ def gtneasy():
     counter = 0
 
     #Loop until found correct number
+    #If guess incorrect print hotter or warmer based on how far off you are and add 1 to the counter
     while True:
         guess = int(input("Guess a number between 0 and 10: "))
         if guess == a:

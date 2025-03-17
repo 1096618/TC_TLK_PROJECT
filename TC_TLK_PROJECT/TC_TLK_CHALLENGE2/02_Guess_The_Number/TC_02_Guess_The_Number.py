@@ -26,7 +26,7 @@ def gtneasy():
         if guess == a:
             print("Correct!")
             counter += 1
-            print(f"You guessed it in {counter} times.")
+            print(f"You guessed it in {counter} attempts.")
             break
         elif guess in range(a-2,a+2):
             print("HOT")
@@ -49,7 +49,7 @@ def gtnmedium():
         if guess == a:
             print("Correct!")
             counter += 1
-            print(f"You guessed it in {counter} times.")
+            print(f"You guessed it in {counter} attempts.")
             break
         elif guess in range(a-10,a+10):
             print("HOT")
@@ -75,7 +75,7 @@ def gtnhard():
         if guess == a:
             print("Correct!")
             counter += 1
-            print(f"You guessed it in {counter} times.")
+            print(f"You guessed it in {counter} attempts.")
             break
         elif guess in range(a - 10, a + 10):
             print("HOT")

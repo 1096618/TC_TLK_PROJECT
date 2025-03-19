@@ -15,8 +15,8 @@ def gtneasy():
 
     #Store a with random integer number within 0 and 10
     a = random.randint(0, 10)
-
     #print(a) #Reveal secret number line for quick testing
+
     #Set a counter as a variable to keep count of guesses
     counter = 0
 

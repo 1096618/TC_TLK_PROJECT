@@ -17,10 +17,12 @@ if statement == "y":
 
     #Loop adding into the list until inputted "done"
     while statement == "y":
-        grocerylist.append(input("Please enter your grocery list: "))
+        grocerylist.append(input("Please enter your grocery item: "))
         if "done" in grocerylist:
             grocerylist.remove("done")
             break
+        #Display the most recent item that has been added
+        print(f"{grocerylist[len(grocerylist)-1]} has been added to the list.")
     print("The current grocery list is:", ", ".join(grocerylist))
 else:
     print("Your grocery list is:", ", ".join(grocerylist))

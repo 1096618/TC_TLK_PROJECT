@@ -1,23 +1,34 @@
-#WIP DONT EDIT EXCEPT ME OFC
+# -----------------------------------------------------------------------------
+# Name:        Grocery List - Slice and length
+# Purpose:     Slice a list and find the length
+#
+# Author:      TC
+# Created:     March 21, 2025
+# -----------------------------------------------------------------------------
 
-
-placeholder = ["first", "second", "third"]
+#Display messages, list and the length of the list
+print("WELCOME TO LIST SLICING MACHINE AND IM TOTALLY NOT DOING THIS OUT OF FRUSTATION THAT I COULDNT TURN IT INTO SOMETHING THAT ISNT CODING")
 grocerylist = ["pen", "pineapple", "apple", "ballpoint pen", "pineapple pen", "apple pen"]
 print("The current grocery list is:", ", ".join(grocerylist))
-#print(len(grocerylist))
+print(f"There are {len(grocerylist)} item in the current list")
+
+#enumerate(grocerylist,1) assign each item in a list with a number starting from 1
+#example (1, "pen")
+#then for each number and item it created, stored those into it's respective variable index, item
+#then display it as 1.pen
+#but since (f"{index}.{item}" for index, item in enumerate(grocerylist,1)) is just a list value generator
+#you either print it using list() or join() it as a list like below
+#print(list(f"{index}.{item}" for index, item in enumerate(grocerylist,1)))
+print(", " .join([f"{index}.{item}" for index, item in enumerate(grocerylist,1)]))
 
 
+#Ask the user to input the numbered item
+slicestart = int(input("From left to right which number you want to slice from(1-5)"))
+#In order for the user to not break the program, i make slicestart+1 so the user dont input any number below the number they inputted
+sliceend = int(input(f"From left to right which number you want to slice from({slicestart + 1}-6)"))
 
-#itemab = input("What item would you like to slice ")
-#itema, itemb = itemab.split()
-#print(f"{itema} and {itemb}")
-#slicedlist = grocerylist[grocerylist.index(itema):grocerylist.index(itemb)]
-#print("The current grocery list is:", ", ".join(slicedlist))
+#Sliced grocery list according to number inputted and assign it in a variable to make it simple when printing
+slicedlist = grocerylist[slicestart - 1:sliceend]
+print("The new list is:", ", ".join(slicedlist))
 
-cond1 = int(input("How many items would you like to slice?(0-3, and only next to each others plz) "))
-if cond1 > 3:
-    print("Invalid input")
-    exit()
-for i in range(cond1):
-    cond2 = input(f"what {placeholder[0]} would you like to slice? ")
-    placeholder.remove(0)
+

@@ -2,9 +2,11 @@ PROBLEM: Create a nested list that you can access, modify and manipulate data
 
 Pseudo code:
 
-create a "menu" you can either see the student list, add students, modify, sort, search/filter<br>
+Menu<br>
+-create a "menu" you can see the student list, add students, modify, sort, search/filter, remove students and reset<br>
 
-Display
+
+Function in menu:
 
 Modifying:<br>
 -Changing name,age,major
@@ -32,5 +34,14 @@ Add
 2. Input age
 3. Input major
 4. Append to student list
+
+Remove
+-Remove a student from list
+1. Select student
+2. Confirm delete
+3. Delete student from list
+
+Reset
+-Reset list format
 
 create a list of student with name, age and major

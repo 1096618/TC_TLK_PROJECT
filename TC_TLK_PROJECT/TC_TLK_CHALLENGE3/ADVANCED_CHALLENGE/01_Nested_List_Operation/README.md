@@ -28,20 +28,20 @@ Filter/search:<br>
 -- Age can be sorted by below and above OR within 2 number
 3. Print a new filtered list
 
-Add
+Add<br>
 -Add a student to student list
 1. Input name
 2. Input age
 3. Input major
 4. Append to student list
 
-Remove
+Remove<br>
 -Remove a student from list
 1. Select student
 2. Confirm delete
 3. Delete student from list
 
-Reset
+Reset<br>
 -Reset list format
 
 create a list of student with name, age and major

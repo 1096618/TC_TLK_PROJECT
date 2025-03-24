@@ -1,3 +1,11 @@
+# -----------------------------------------------------------------------------
+# Name:        Student list menu
+# Purpose:     Write a program that have multiple function that can modify the student list.
+#
+# Author:      TC
+# Created:     March 24, 2025
+# -----------------------------------------------------------------------------
+
 import copy
 
 studentlist = [

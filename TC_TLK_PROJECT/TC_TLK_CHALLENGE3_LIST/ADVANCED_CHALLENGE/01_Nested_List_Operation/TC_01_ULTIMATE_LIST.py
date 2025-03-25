@@ -335,10 +335,11 @@ def deleting():
     global copystudentlist
     copystudentlist = copy.deepcopy(studentlist)
 
-#reset
+#Reset
 def listreset():
     global copystudentlist
     copystudentlist = copy.deepcopy(studentlist)
+    print("List format has been reset.")
 
 while True:
     print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")

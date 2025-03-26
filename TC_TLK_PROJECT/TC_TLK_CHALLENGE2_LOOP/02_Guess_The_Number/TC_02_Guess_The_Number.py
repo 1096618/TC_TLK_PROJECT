@@ -77,6 +77,8 @@ def gtnhard():
             print("Correct!")
             counter += 1
             print(f"You guessed it in {counter} attempts.")
+            global newhardscore
+            newhardscore = counter
             break
         elif guess in range(a - 10, a + 10):
             print("HOT")
@@ -97,19 +99,35 @@ def gtnhard():
             print("Cold")
             counter += 1
 
+#===============================HIGHSCORE===========================================#
+easyscore =0
+neweasyscore =0
+mediumscore =0
+newmediumscore =0
+hardscore =0
+newhardscore =0
+def highscore():
+    global newhardscore
+    global hardscore
+    if newhardscore > hardscore:
+        hardscore = newhardscore
+    print("The highscore is:")
+    print("Easy mode:")
+    print("Medium mode:")
+    print(f"Hard mode: {newhardscore}")
+
 #===============================INPUT COMMAND===========================================#
 while True:
-    gamemode = input("What difficulty do you want to play (easy/medium/hard): ").lower()
+    gamemode = input("What difficulty do you want to play or check score (easy/medium/hard)(score): ").lower()
     if gamemode == "easy":
         gtneasy()
     elif gamemode == "medium":
         gtnmedium()
     elif gamemode == "hard":
         gtnhard()
+    elif gamemode == "score":
+        highscore()
     else:
         print("Invalid input.")
-        break
-    again = input("Do you want to play again? (y/n): ").lower()
-    if again == "n":
         break
 #=======================================================================================#

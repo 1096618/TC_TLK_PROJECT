@@ -7,6 +7,7 @@
 # -----------------------------------------------------------------------------
 
 import copy
+import time
 
 studentlist = [
     {"name": "Charlie", "age": 24, "major": "Biology"},
@@ -351,7 +352,8 @@ while True:
           4. Filter student list(filter)
           5. Add a student to list(add)
           6. Delete a student from list(delete)
-          7. Reset list format(reset)\n""")
+          7. Reset list format(reset)
+          0. Exist program(exit)\n""")
 
     command = input("          Enter your choice: ")
     print("/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/")
@@ -370,7 +372,7 @@ while True:
     elif command == "reset" or command == "7":
         listreset()
     else:
-        print("Invalid input")
+        print("Closing program", end=" "), time.sleep(1), print(".", end=" "), time.sleep(1), print(".",end=" "), time.sleep(1), print("."), time.sleep(1)
         break
 
 

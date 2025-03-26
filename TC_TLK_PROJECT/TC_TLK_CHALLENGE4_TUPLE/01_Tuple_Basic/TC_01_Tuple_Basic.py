@@ -1,3 +1,11 @@
+# -----------------------------------------------------------------------------
+# Name:        Tuple Basic
+# Purpose:     Write a program that check for individual item in the tuple
+#
+# Author:      TC
+# Created:     March 25, 2025
+# -----------------------------------------------------------------------------
+
 basic_tuple = ("hello", True, 2, 3.14, ("World", "Gaia"))
 
 #Loop printing woooooooo

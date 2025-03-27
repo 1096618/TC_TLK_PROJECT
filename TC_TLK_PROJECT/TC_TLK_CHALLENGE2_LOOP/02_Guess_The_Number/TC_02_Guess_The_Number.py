@@ -5,6 +5,12 @@
 # Author:      TC
 # Created:     March 7, 2025
 # -----------------------------------------------------------------------------
+#GAME HIGHSCORE:
+#- TC
+#EASY MODE: 1
+#MEDIUM MODE: 5
+#HARD MODE: 4
+# -----------------------------------------------------------------------------
 
 #Import random module
 import random
@@ -28,6 +34,8 @@ def gtneasy():
             print("Correct!")
             counter += 1
             print(f"You guessed it in {counter} attempts.")
+            global neweasyscore
+            neweasyscore = counter
             break
         elif guess in range(a-2,a+2):
             print("HOT")
@@ -51,6 +59,8 @@ def gtnmedium():
             print("Correct!")
             counter += 1
             print(f"You guessed it in {counter} attempts.")
+            global newmediumscore
+            newmediumscore = counter
             break
         elif guess in range(a-10,a+10):
             print("HOT")
@@ -100,24 +110,34 @@ def gtnhard():
             counter += 1
 
 #===============================HIGHSCORE===========================================#
-easyscore =0
-neweasyscore =0
-mediumscore =0
-newmediumscore =0
-hardscore =0
-newhardscore =0
+easyscore =999
+neweasyscore =999
+mediumscore =999
+newmediumscore =999
+hardscore =999
+newhardscore =999
 def highscore():
     global newhardscore
     global hardscore
-    if newhardscore > hardscore:
+    if newhardscore < hardscore:
         hardscore = newhardscore
+    global newmediumscore
+    global mediumscore
+    if newmediumscore < mediumscore:
+        mediumscore = newmediumscore
+    global neweasyscore
+    global easyscore
+    if neweasyscore < easyscore:
+        easyscore = neweasyscore
     print("The highscore is:")
-    print("Easy mode:")
-    print("Medium mode:")
-    print(f"Hard mode: {newhardscore}")
+    print(f"Easy mode: {easyscore}")
+    print(f"Medium mode: {mediumscore}")
+    print(f"Hard mode: {hardscore}")
+    print("The lower the score the better!")
 
 #===============================INPUT COMMAND===========================================#
 while True:
+    print("#=======================================================================================#")
     gamemode = input("What difficulty do you want to play or check score (easy/medium/hard)(score): ").lower()
     if gamemode == "easy":
         gtneasy()
@@ -129,5 +149,6 @@ while True:
         highscore()
     else:
         print("Invalid input.")
+        print("Exiting program...")
         break
 #=======================================================================================#

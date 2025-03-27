@@ -15,6 +15,7 @@
 
 #Import random module
 import random
+import time
 
 #===============================EASY===========================================#
 #Define guess the number EASY mode function
@@ -83,6 +84,7 @@ def gtnhard():
     #print(a)
     counter = 0
     while True:
+
         guess = int(input("Guess a number between 0 and 1000: "))
         if guess == a:
             print("Correct!")
@@ -110,6 +112,58 @@ def gtnhard():
             print("Cold")
             counter += 1
 
+#===============================HARD===========================================#
+def impossible(time_limit):
+
+    a = random.randint(0, 1000000)
+    counter = 0
+    start_time = time.time()
+
+    print(f"You have {time_limit} second to guess it correctly good luck!")
+    while True:
+        elapsed_time = time.time() - start_time
+        if elapsed_time > time_limit:
+            print("Time up! Game over!")
+            break
+        guess = int(input("Guess a number between 0 and 1,000,000: "))
+        if guess == a:
+            print("Correct!")
+            counter += 1
+            print(f"You guessed it in {counter} attempts.")
+            global newhardscore
+            newhardscore = counter
+            break
+        elif guess in range(a - 10, a + 10):
+            print("HOT")
+            time_left = time_limit - int(elapsed_time)
+            print(f"You have {time_left} seconds remaining.")
+            counter += 1
+        elif guess in range(a - 25, a + 25):
+            print("Very warm")
+            time_left = time_limit - int(elapsed_time)
+            print(f"You have {time_left} seconds remaining.")
+            counter += 1
+        elif guess in range(a - 50, a + 50):
+            print("Warm")
+            time_left = time_limit - int(elapsed_time)
+            print(f"You have {time_left} seconds remaining.")
+            counter += 1
+        elif guess in range(a - 100, a + 100):
+            print("A bit warm")
+            time_left = time_limit - int(elapsed_time)
+            print(f"You have {time_left} seconds remaining.")
+            counter += 1
+        elif guess in range(a - 200, a + 200):
+            print("A bit cold")
+            time_left = time_limit - int(elapsed_time)
+            print(f"You have {time_left} seconds remaining.")
+            counter += 1
+        else:
+            print("Cold")
+            time_left = time_limit - int(elapsed_time)
+            print(f"You have {time_left} seconds remaining.")
+            counter += 1
+
 #===============================HIGHSCORE===========================================#
 easyscore =999
 neweasyscore =999
@@ -118,18 +172,25 @@ newmediumscore =999
 hardscore =999
 newhardscore =999
 def highscore():
+    #Get highscore for hard mode
     global newhardscore
     global hardscore
     if newhardscore < hardscore:
         hardscore = newhardscore
+
+    #Get highscore for medium mode
     global newmediumscore
     global mediumscore
     if newmediumscore < mediumscore:
         mediumscore = newmediumscore
+
+    #Get highscore for easy mode
     global neweasyscore
     global easyscore
     if neweasyscore < easyscore:
         easyscore = neweasyscore
+
+    #Display highscore
     print("The highscore is:")
     print(f"Easy mode: {easyscore}")
     print(f"Medium mode: {mediumscore}")
@@ -148,6 +209,8 @@ while True:
         gtnhard()
     elif gamemode == "score":
         highscore()
+    elif gamemode == "impossible":
+        impossible(60)
     else:
         print("Invalid input.")
         print("Exiting program...")

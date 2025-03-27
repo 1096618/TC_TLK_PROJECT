@@ -4,11 +4,12 @@
 #
 # Author:      TC
 # Created:     March 7, 2025
+# Updated:     March 27, 2025: Added highscore system
 # -----------------------------------------------------------------------------
 #GAME HIGHSCORE:
 #- TC
 #EASY MODE: 1
-#MEDIUM MODE: 5
+#MEDIUM MODE: 3
 #HARD MODE: 4
 # -----------------------------------------------------------------------------
 

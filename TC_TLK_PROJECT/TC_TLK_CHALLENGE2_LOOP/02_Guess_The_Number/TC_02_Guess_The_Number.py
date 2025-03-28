@@ -112,26 +112,61 @@ def gtnhard():
             print("Cold")
             counter += 1
 
-#===============================HARD===========================================#
+#===============================IMPOSSIBLE===========================================#
 def impossible(time_limit):
+
+    def hint1(a):
+        if a >= 500000:
+            print("=====================================")
+            print("Hint: The number is on the upper half")
+            print("=====================================")
+        elif a <= 500000:
+            print("=====================================")
+            print("Hint: The number is on the lower half")
+            print("=====================================")
+
+
+    def hint2(a):
+        first_digit = str(a)[0]
+        print("===============================================")
+        print(f"The first digit of the number is {first_digit}")
+        print("===============================================")
+
+
+    def hint3(a):
+        print("=====================================")
+        print(f"The number have {len(str(a))} digits")
+        print("=====================================")
+
 
     a = random.randint(0, 1000000)
     counter = 0
     start_time = time.time()
+    guess = None
 
+    #Time module
     print(f"You have {time_limit} second to guess it correctly good luck!")
     while True:
         elapsed_time = time.time() - start_time
         if elapsed_time > time_limit:
             print("Time up! Game over!")
             break
-        guess = int(input("Guess a number between 0 and 1,000,000: "))
+        elif elapsed_time >=60 and elapsed_time <61: hint1(a) #time.time() doesnt generate second in integer but in float
+        elif elapsed_time >=90 and elapsed_time <91: hint2(a)
+        elif elapsed_time >=105 and elapsed_time <106: hint3(a)
+
+
+        #Guessing
+        try:
+            guess = int(input("Guess a number between 0 and 1,000,000: "))
+        except ValueError:
+            print("Invalid input try again")
         if guess == a:
             print("Correct!")
             counter += 1
             print(f"You guessed it in {counter} attempts.")
-            global newhardscore
-            newhardscore = counter
+            global newimpossiblescore
+            newimpossiblescore = counter
             break
         elif guess in range(a - 10, a + 10):
             print("HOT")
@@ -153,7 +188,7 @@ def impossible(time_limit):
             time_left = time_limit - int(elapsed_time)
             print(f"You have {time_left} seconds remaining.")
             counter += 1
-        elif guess in range(a - 200, a + 200):
+        elif guess in range(a - 250, a + 250):
             print("A bit cold")
             time_left = time_limit - int(elapsed_time)
             print(f"You have {time_left} seconds remaining.")
@@ -165,28 +200,28 @@ def impossible(time_limit):
             counter += 1
 
 #===============================HIGHSCORE===========================================#
-easyscore =999
-neweasyscore =999
-mediumscore =999
-newmediumscore =999
-hardscore =999
-newhardscore =999
+easyscore =999999 #Where the highscore display
+neweasyscore =999999
+mediumscore =999999 #Where the highscore display
+newmediumscore =999999
+hardscore =999999 #Where the highscore display
+newhardscore =999999
+impossiblescore =999999 #Where the highscore display
+newimpossiblescore =99999
 def highscore():
-    #Get highscore for hard mode
-    global newhardscore
-    global hardscore
+    """Displays the high scores for each difficulty."""
+    global newimpossiblescore, impossiblescore
+    global newhardscore, hardscore
+    global newmediumscore, mediumscore
+    global neweasyscore, easyscore
+
+    # Update high scores if new scores are better
+    if newimpossiblescore < impossiblescore:
+        impossiblescore = newimpossiblescore
     if newhardscore < hardscore:
         hardscore = newhardscore
-
-    #Get highscore for medium mode
-    global newmediumscore
-    global mediumscore
     if newmediumscore < mediumscore:
         mediumscore = newmediumscore
-
-    #Get highscore for easy mode
-    global neweasyscore
-    global easyscore
     if neweasyscore < easyscore:
         easyscore = neweasyscore
 
@@ -195,12 +230,13 @@ def highscore():
     print(f"Easy mode: {easyscore}")
     print(f"Medium mode: {mediumscore}")
     print(f"Hard mode: {hardscore}")
+    print(f" Impossible mode: {impossiblescore}")
     print("The lower the score the better!")
 
 #===============================INPUT COMMAND===========================================#
 while True:
     print("#=======================================================================================#")
-    gamemode = input("What difficulty do you want to play or check score (easy/medium/hard)(score): ").lower()
+    gamemode = input("What difficulty do you want to play or check score (easy/medium/hard/impossible/score): ").lower()
     if gamemode == "easy":
         gtneasy()
     elif gamemode == "medium":
@@ -210,7 +246,7 @@ while True:
     elif gamemode == "score":
         highscore()
     elif gamemode == "impossible":
-        impossible(60)
+        impossible(120)
     else:
         print("Invalid input.")
         print("Exiting program...")

@@ -1,9 +1,8 @@
-import time
 import random
 
 emoji = ["🍎", "🍓", "🍇", "🍒", "🍑"]
 weights = [55, 35, 12, 20, 80]
-# apple = 50, strawberry = 35, grape = 5, cherry = 15, peach = 80
+# apple = 55, strawberry = 35, grape = 12, cherry = 20, peach = 80
 
 
 grape_won = 0  # 🍇 tracker
@@ -13,7 +12,7 @@ apple_won = 0  # 🍎 tracker
 peach_won = 0  # ass tracker
 
 tries_limit = 10000000
-tries = 0
+tries = 0 #DONT CHANGE THIS
 
 while True:
 

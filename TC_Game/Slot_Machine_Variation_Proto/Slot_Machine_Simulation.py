@@ -11,7 +11,8 @@ strawberry_won = 0  # 🍓 tracker
 apple_won = 0  # 🍎 tracker
 peach_won = 0  # ass tracker
 
-tries_limit = 10000000
+tries_limit = 100000
+simulation = "h" #change depending on you doing high amount of tries or low (high/h / low/l)
 tries = 0 #DONT CHANGE THIS
 
 while True:
@@ -46,9 +47,19 @@ peach_percentage = (peach_won/tries_limit)*100
 lose_percentage = (lose_count/tries_limit)*100
 win_percentage = 100 - lose_percentage
 
-print(f"Grape has won: {grape_won} | Winrate: {grape_percentage:.2f}% | 1 in {1/(grape_percentage/100):,.0f}")
-print(f"Cherry has won: {cherry_won} | Winrate: {cherry_percentage:.2f}% | 1 in {1/(cherry_percentage/100):,.0f}")
-print(f"Strawberry has won: {strawberry_won} | Winrate: {strawberry_percentage:.2f}% | 1 in {1/(strawberry_percentage/100):,.0f}")
-print(f"Apple has won: {apple_won} | Winrate: {apple_percentage:.2f}% | 1 in {1/(apple_percentage/100):,.0f}")
-print(f"Peach has won: {peach_won} | Winrate: {peach_percentage:.2f}% | 1 in {1/(peach_percentage/100):,.0f}")
-print(f"Lost: {lose_count} | Loserate: {lose_percentage:.2f}% | 1 in {1 / (win_percentage / 100):,.0f}")
+if simulation == "low" or simulation == "l":
+        #IF doing low tries simulation
+    print(f"Grape has won: {grape_won} | Winrate: {grape_percentage:.2f}%")
+    print(f"Cherry has won: {cherry_won} | Winrate: {cherry_percentage:.2f}%")
+    print(f"Strawberry has won: {strawberry_won} | Winrate: {strawberry_percentage:.2f}%")
+    print(f"Apple has won: {apple_won} | Winrate: {apple_percentage:.2f}%")
+    print(f"Peach has won: {peach_won} | Winrate: {peach_percentage:.2f}%")
+    print(f"Lost: {lose_count} | Loserate: {lose_percentage:.2f}%")
+else:
+        #IF doing high tries simulation and want "1 in..."
+    print(f"Grape has won: {grape_won} | Winrate: {grape_percentage:.2f}% | 1 in {1/(grape_percentage/100):,.0f}")
+    print(f"Cherry has won: {cherry_won} | Winrate: {cherry_percentage:.2f}% | 1 in {1/(cherry_percentage/100):,.0f}")
+    print(f"Strawberry has won: {strawberry_won} | Winrate: {strawberry_percentage:.2f}% | 1 in {1/(strawberry_percentage/100):,.0f}")
+    print(f"Apple has won: {apple_won} | Winrate: {apple_percentage:.2f}% | 1 in {1/(apple_percentage/100):,.0f}")
+    print(f"Peach has won: {peach_won} | Winrate: {peach_percentage:.2f}% | 1 in {1/(peach_percentage/100):,.0f}")
+    print(f"Lost: {lose_count} | Loserate: {lose_percentage:.2f}% | 1 in {1 / (win_percentage / 100):,.0f}")

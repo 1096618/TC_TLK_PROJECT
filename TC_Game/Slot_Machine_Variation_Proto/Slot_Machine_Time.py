@@ -14,15 +14,10 @@
 #    time_left = time_limit - int(elapsed_time)
 #    print(f"You have {time_left} seconds remaining.")
 
-#a = 5341
-#print(f"The number have {len(str(a))} digits")
-
 import time
 import random
 
-emojia = ["🍎", "🍓", "🍇", "🍒", "🍑"]
-emojib = ["🍎", "🍓", "🍇", "🍒", "🍑"]
-emojic = ["🍎", "🍓", "🍇", "🍒", "🍑"]
+emoji= ["🍎", "🍓", "🍇", "🍒", "🍑"]
 weights = [50, 35, 5, 15, 80]
 #apple = 50, strawberry = 35, grape = 5, cherry = 15, peach = 80
 
@@ -33,20 +28,24 @@ strawberry_won =0 #🍓 tracker
 apple_won =0 #🍎 tracker
 peach_won =0  #ass tracker
 
-time_limit = 220 #540
+time_limit = 3 #540
 start_time = time.time()
+
 while True:
+
     elapsed_time = time.time() - start_time
     if elapsed_time > time_limit:
         print("Time up! Game over!")
         break
+
     for i in range(50):
-        a = random.choices(emojia, weights= weights, k=1)
-        b = random.choices(emojib, weights= weights, k=1)
-        c = random.choices(emojic, weights= weights, k=1)
+        a = random.choices(emoji, weights= weights, k=1)
+        b = random.choices(emoji, weights= weights, k=1)
+        c = random.choices(emoji, weights= weights, k=1)
         print(f"\r                     Slot: {a[0]} {b[0]} {c[0]}", end="", flush=True)
         time.sleep(0.1)
     print()
+
     if a[0] == "🍇" and b[0] == "🍇" and c[0] == "🍇":
         print("MEGA JACKPOT")
         grape_won += 1

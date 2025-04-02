@@ -19,3 +19,8 @@ Game menu
 2. Ask the user which difficulty they want to play(easy/medium/hard)
 3. Execute function based on what inputted
 4. After finishing a game ask the user if they want to play again if no break loop
+
+Minigame
+
+- Landmine
+- 

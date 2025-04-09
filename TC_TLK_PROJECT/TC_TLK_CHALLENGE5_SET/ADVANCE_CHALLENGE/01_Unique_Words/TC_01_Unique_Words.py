@@ -1,15 +1,25 @@
-story = ("A hungry fox wanted to catch a rabbit, but the rabbit showed him a sweet berry patch instead. The fox enjoyed the berries and decided they'd be friends from then on.")
+# -----------------------------------------------------------------------------
+# Name:        Unique words
+# Purpose:     Write a program that filter out a sentence/story with only unique words
+#
+# Author:      TC
+# Created:     March 9, 2025
+# -----------------------------------------------------------------------------
+
+story = ("Trailer lived in a small trailer on the edge of town. Every morning, he’d sip coffee on the porch of his trailer, enjoying the quiet. His trailer wasn’t much, but it was enough. Sometimes he’d drive away, but he always returned to his trailer his peaceful, perfect home.")
 words = story.split()
-print(words)
 
-#print(" ".join(words))
+print("Random story:")
+print(" ".join(words))
+print()
 
-set = set(words)
-empty_story = ()
-index = 0
-for words in set:
-    if words[index] in set:
-        empty_story += words[index]
-        index = index + 1
+unique_words = set(words)
+empty_story = []
 
-print(empty_story)
+for word in words:
+    if word in unique_words:
+        empty_story.append(word)
+        unique_words.remove(word)
+
+print("Same story with only unique words:")
+print(" ".join(empty_story))

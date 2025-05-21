@@ -1,5 +1,45 @@
-import tkinter as tk
 import customtkinter
+import sqlite3
+import bcrypt
+from cryptography.fernet import Fernet
+
+
+connection = sqlite3.connect('TC_Password_Manager.db')
+cursor = connection.cursor()
+
+
+def create_tables():
+    # Connect to the SQLite database (this will create the database if it doesn't exist)
+    conn = sqlite3.connect("password_manager.db")
+    cursor = conn.cursor()
+
+    # Create 'users' table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,  -- A unique identifier for each user.
+        username TEXT UNIQUE NOT NULL,         -- The username (must be unique).
+        password_hash TEXT NOT NULL,           -- The hashed version of the user's password.
+        salt TEXT NOT NULL,                    -- A unique salt used for password hashing.
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP  -- Automatically records when the account was created.
+    );""")
+
+    # Create 'vault_entries' table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS vault_entries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,  -- A unique identifier for each vault entry.
+        user_id INTEGER NOT NULL,              -- The ID of the user who owns this entry (foreign key).
+        website TEXT NOT NULL,                 -- The website or service (e.g., 'gmail.com').
+        username TEXT NOT NULL,                -- The username for the website/service.
+        password_encrypted TEXT NOT NULL,      -- The encrypted password for the website.
+        notes TEXT,                            -- Optional notes for additional information.
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Automatically records when the entry was created.
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Automatically records when the entry was last updated.
+        FOREIGN KEY (user_id) REFERENCES users(id)  -- Ensures this entry belongs to a valid user.
+    );""")
+
+    # Commit changes and close the connection
+    conn.commit()
+    conn.close()
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -12,9 +52,9 @@ class PasswordManagerApp(customtkinter.CTk):
         self.title("Password Manager")
 
         # Call the function to set up the login page
-        self.create_login_page()
+        self.login_page()
 
-    def create_login_page(self):
+    def login_page(self):
         # Title
         title_label = customtkinter.CTkLabel(self, text="TC Password Manager", font=("Comic Sans MS", 32),
                                              text_color="white")

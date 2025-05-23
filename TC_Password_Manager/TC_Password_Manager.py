@@ -19,7 +19,6 @@ def create_tables():
         id INTEGER PRIMARY KEY AUTOINCREMENT,  -- A unique identifier for each user.
         username TEXT UNIQUE NOT NULL,         -- The username (must be unique).
         password_hash TEXT NOT NULL,           -- The hashed version of the user's password.
-        salt TEXT NOT NULL,                    -- A unique salt used for password hashing.
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP  -- Automatically records when the account was created.
     );""")
 
@@ -54,6 +53,10 @@ class PasswordManagerApp(customtkinter.CTk):
         # Call the function to set up the login page
         self.login_page()
 
+    def appearance_theme(self):
+        customtkinter.set_appearance_mode("dark")
+        customtkinter.set_default_color_theme("dark-blue")
+
     def login_page(self):
         # Title
         title_label = customtkinter.CTkLabel(self, text="TC Password Manager", font=("Comic Sans MS", 32),
@@ -87,14 +90,76 @@ class PasswordManagerApp(customtkinter.CTk):
                                                command=self.login_button_pressed)
         login_button.place(relx=0.5, rely=0.67, anchor="center")
 
-    def create_account_clicked(self, event):
-        print("create new account clicked")
 
     def login_button_pressed(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
         print(f"Username entered: {username}")
         print(f"Password entered: {password}")
+
+    def create_account_clicked(self, event):
+        print("create new account clicked")
+        self.appearance_theme()
+        self.clear_screen()
+        self.create_account_page()
+
+    def clear_screen(self):
+        for widget in self.winfo_children():
+            widget.destroy()
+
+    def create_account_page(self):
+        # Title
+        title_label = customtkinter.CTkLabel(self, text="TC Password Manager", font=("Comic Sans MS", 32),
+                                             text_color="white")
+        title_label.pack(padx=0, pady=50, anchor="center")
+
+        # Login label
+        login_label = customtkinter.CTkLabel(self, text="Create account", font=("Comic Sans MS", 30)
+                                             , text_color="white")
+        login_label.pack(padx=0, pady=45, anchor="center")
+
+        # Username input
+        self.create_username_entry = customtkinter.CTkEntry(
+            self,
+            placeholder_text="Username",
+            font=("Comic Sans MS", 15),
+            width=250,
+            height=50,
+            fg_color="#2b2b2b",
+            text_color="white",
+            placeholder_text_color="gray70"
+        )
+        self.create_username_entry.place(relx=0.5, rely=0.45, anchor="center")
+
+        # Password input
+        self.create_password_entry = customtkinter.CTkEntry(
+            self,
+            placeholder_text="Password",
+            font=("Comic Sans MS", 15),
+            width=250,
+            height=50,
+            fg_color="#2b2b2b",
+            text_color="white",
+            placeholder_text_color="gray70"
+        )
+        self.create_password_entry.place(relx=0.5, rely=0.56, anchor="center")
+
+        # Confirm Password input
+        self.confirm_password_entry = customtkinter.CTkEntry(
+            self,
+            placeholder_text="Confirm password",
+            font=("Comic Sans MS", 15),
+            width=250,
+            height=50,
+            fg_color="#2b2b2b",
+            text_color="white",
+            placeholder_text_color="gray70"
+        )
+        self.confirm_password_entry.place(relx=0.5, rely=0.67, anchor="center")
+
+        self.create_username_entry.update()
+        self.create_password_entry.update()
+        self.confirm_password_entry.update()
 
 # Run the app
 app = PasswordManagerApp()

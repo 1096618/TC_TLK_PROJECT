@@ -99,24 +99,24 @@ class PasswordManagerApp(customtkinter.CTk):
 
     def create_account_clicked(self, event):
         print("create new account clicked")
-        self.appearance_theme()
         self.clear_screen()
-        self.create_account_page()
+        #self.create_account_page()
+        self.after(0, self.create_account_page)
 
     def clear_screen(self):
         for widget in self.winfo_children():
             widget.destroy()
 
     def create_account_page(self):
-        # Title
-        title_label = customtkinter.CTkLabel(self, text="TC Password Manager", font=("Comic Sans MS", 32),
+        # Create Title
+        create_title_label = customtkinter.CTkLabel(self, text="TC Password Manager", font=("Comic Sans MS", 32),
                                              text_color="white")
-        title_label.pack(padx=0, pady=50, anchor="center")
+        create_title_label.pack(padx=0, pady=50, anchor="center")
 
-        # Login label
-        login_label = customtkinter.CTkLabel(self, text="Create account", font=("Comic Sans MS", 30)
+        # Create account label
+        create_account_label = customtkinter.CTkLabel(self, text="Create account", font=("Comic Sans MS", 30)
                                              , text_color="white")
-        login_label.pack(padx=0, pady=45, anchor="center")
+        create_account_label.pack(padx=0, pady=45, anchor="center")
 
         # Username input
         self.create_username_entry = customtkinter.CTkEntry(
@@ -157,9 +157,40 @@ class PasswordManagerApp(customtkinter.CTk):
         )
         self.confirm_password_entry.place(relx=0.5, rely=0.67, anchor="center")
 
-        self.create_username_entry.update()
-        self.create_password_entry.update()
-        self.confirm_password_entry.update()
+        # Force placeholder render on username field
+        #self.create_username_entry.focus()
+        #self.create_password_entry.update()  # Shift focus to another field
+        #self.confirm_password_entry.update()
+        #self.update_idletasks()
+        self.focus()    # Return focus to the root window
+
+        # Create account button
+        create_account_button = customtkinter.CTkButton(self, text="Create account", font=("Comic Sans MS", 25)
+                                                        , width=250
+                                                        , height=50
+                                                        ,command=self.create_account_button_pressed)
+        create_account_button.place(relx=0.5, rely=0.78, anchor="center")
+
+        #Switch back from create to login page
+        switchx = 0.45
+        switch_logintext_label = customtkinter.CTkLabel(self, text="Already have an account?"
+                                                        , font=("Comic Sans MS", 15))
+        switch_logintext_label.place(relx=switchx, rely=0.87, anchor="center")
+        self.switch_login_label = customtkinter.CTkLabel(self, text="Log in"
+                                                          , font=("Comic Sans MS", 15, "underline")
+                                                          , fg_color="transparent")
+        self.switch_login_label.configure(cursor="hand2")
+        self.switch_login_label.bind("<Button-1>", self.switch_login_clicked)
+        self.switch_login_label.place(relx=switchx+0.235, rely=0.87, anchor="center")
+
+    def create_account_button_pressed(self):
+        print("create account button pressed")
+
+    def switch_login_clicked(self, event):
+        self.clear_screen()
+        self.login_page()
+
+
 
 # Run the app
 app = PasswordManagerApp()

@@ -49,6 +49,7 @@ class PasswordManagerApp(customtkinter.CTk):
         # App thing
         self.geometry("450x580")
         self.title("Password Manager")
+        self.resizable(False, False)
 
         # Call the function to set up the login page
         self.login_page()
@@ -96,11 +97,24 @@ class PasswordManagerApp(customtkinter.CTk):
         password = self.password_entry.get()
         print(f"Username entered: {username}")
         print(f"Password entered: {password}")
+        if username == "test" and password == "test123":
+            print("correct username and password entered")
+            if hasattr(self, "red_frame") and self.red_frame.winfo_exists(): #if red frame exist delete
+                self.red_frame.destroy(), self.invalid_pass.destroy()
+
+        else:
+            #     create red frame and label saying invalid password
+            self.red_frame = customtkinter.CTkFrame(self, width=150, height=32
+                                                    , corner_radius=5, border_color="red", border_width=2)
+            self.red_frame.place(relx=0.5, rely=0.94, anchor="center")
+            self.invalid_pass =customtkinter.CTkLabel(master = self.red_frame, text="Invalid password"
+                                                      , font=("Comic Sans MS", 15), bg_color="transparent")
+            self.invalid_pass.place(relx=0.5, rely=0.5, anchor="center")
 
     def create_account_clicked(self, event):
         print("create new account clicked")
         self.clear_screen()
-        #self.create_account_page()
+        #self.create_account_page() #bug test
         self.after(0, self.create_account_page)
 
     def clear_screen(self):
@@ -183,12 +197,31 @@ class PasswordManagerApp(customtkinter.CTk):
         self.switch_login_label.bind("<Button-1>", self.switch_login_clicked)
         self.switch_login_label.place(relx=switchx+0.235, rely=0.87, anchor="center")
 
-    def create_account_button_pressed(self):
-        print("create account button pressed")
-
     def switch_login_clicked(self, event):
+        print("switch login clicked")
         self.clear_screen()
         self.login_page()
+
+    def create_account_button_pressed(self):
+        print("create account button pressed")
+        new_username = self.create_username_entry.get()
+        new_password = self.confirm_password_entry.get()
+        if self.confirm_password_entry.get() == self.create_password_entry.get():
+            # Safely destroy invalid_pass label if it exists
+            if hasattr(self, "red_frame") and self.red_frame.winfo_exists():
+                self.red_frame.destroy()
+
+
+
+
+        else:
+            #    Creating frame and label saying invalid pass
+            self.red_frame = customtkinter.CTkFrame(self, width=150, height=32
+                                                    , corner_radius=5, border_color="red", border_width=2)
+            self.red_frame.place(relx=0.5, rely=0.94, anchor="center")
+            self.invalid_pass =customtkinter.CTkLabel(master = self.red_frame, text="Invalid password"
+                                                      , font=("Comic Sans MS", 15), bg_color="transparent")
+            self.invalid_pass.place(relx=0.5, rely=0.5, anchor="center")
 
 
 

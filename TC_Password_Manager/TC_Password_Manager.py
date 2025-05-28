@@ -202,26 +202,30 @@ class PasswordManagerApp(customtkinter.CTk):
         self.clear_screen()
         self.login_page()
 
+    def show_error(self, message, width=320, relx=0.5, rely=0.94, anchor="center"):
+        if hasattr(self, "red_frame") and self.red_frame.winfo_exists():
+            self.red_frame.destroy()
+
+        self.red_frame = customtkinter.CTkFrame(self, width=width, height=32,
+                                                corner_radius=5, border_color="red", border_width=2)
+        self.red_frame.place(relx=relx, rely=rely, anchor=anchor)
+
+        self.error_label = customtkinter.CTkLabel(master=self.red_frame,
+                                                  text=message,
+                                                  font=("Comic Sans MS", 15),
+                                                  bg_color="transparent")
+        self.error_label.place(relx=0.5, rely=0.5, anchor="center")
+
     def create_account_button_pressed(self):
         print("create account button pressed")
         new_username = self.create_username_entry.get()
-        new_password = self.confirm_password_entry.get()
-        if self.confirm_password_entry.get() == self.create_password_entry.get():
-            # Safely destroy invalid_pass label if it exists
-            if hasattr(self, "red_frame") and self.red_frame.winfo_exists():
-                self.red_frame.destroy()
+        new_password = self.create_password_entry.get().encode('utf-8')
+        confirm_password = self.confirm_password_entry.get().encode('utf-8')
 
-
-
-
-        else:
-            #    Creating frame and label saying invalid pass
-            self.red_frame = customtkinter.CTkFrame(self, width=150, height=32
-                                                    , corner_radius=5, border_color="red", border_width=2)
-            self.red_frame.place(relx=0.5, rely=0.94, anchor="center")
-            self.invalid_pass =customtkinter.CTkLabel(master = self.red_frame, text="Invalid password"
-                                                      , font=("Comic Sans MS", 15), bg_color="transparent")
-            self.invalid_pass.place(relx=0.5, rely=0.5, anchor="center")
+        if not new_username or not new_password or not confirm_password:
+            self.show_error("Please enter all fields", width=160, relx=0.5, rely=0.94, anchor="center")
+        elif len(new_username) < 3:
+            self.show_error("Username too short", width=145, relx=0.5, rely=0.94, anchor="center")
 
 
 

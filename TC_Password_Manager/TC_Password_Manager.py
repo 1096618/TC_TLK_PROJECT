@@ -1,3 +1,5 @@
+import hashlib
+
 import customtkinter
 import sqlite3
 import bcrypt
@@ -7,10 +9,9 @@ from cryptography.fernet import Fernet
 connection = sqlite3.connect('TC_Password_Manager.db')
 cursor = connection.cursor()
 
-
 def create_tables():
     # Connect to the SQLite database (this will create the database if it doesn't exist)
-    conn = sqlite3.connect("password_manager.db")
+    conn = sqlite3.connect("TC_Password_Manager.db")
     cursor = conn.cursor()
 
     # Create 'users' table
@@ -18,6 +19,7 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,  -- A unique identifier for each user.
         username TEXT UNIQUE NOT NULL,         -- The username (must be unique).
+        password TEXT NOT NULL,                -- The plain password (VERY ILLEGAL BUT IT PERSONAL SO DOESNT MATTER).
         password_hash TEXT NOT NULL,           -- The hashed version of the user's password.
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP  -- Automatically records when the account was created.
     );""")
@@ -220,15 +222,55 @@ class PasswordManagerApp(customtkinter.CTk):
         print("create account button pressed")
         new_username = self.create_username_entry.get()
         new_password = self.create_password_entry.get().encode('utf-8')
-        confirm_password = self.confirm_password_entry.get().encode('utf-8')
+        confirmed_password = self.confirm_password_entry.get().encode('utf-8')
 
-        if not new_username or not new_password or not confirm_password:
+        # delete error frame
+        if hasattr(self, "red_frame") and self.red_frame.winfo_exists():
+            self.red_frame.destroy()
+        if hasattr(self, "green_frame") and self.green_frame.winfo_exists():
+            self.green_frame.destroy()
+
+        if not new_username or not new_password or not confirmed_password:
             self.show_error("Please enter all fields", width=160, relx=0.5, rely=0.94, anchor="center")
         elif len(new_username) < 3:
             self.show_error("Username too short", width=145, relx=0.5, rely=0.94, anchor="center")
+        elif confirmed_password != new_password:
+            self.show_error("Password doesnt match", width=160, relx=0.5, rely=0.94, anchor="center")
+        elif len(confirmed_password) > 72: #realistically i need to make dynamic detection but this will do
+            self.show_error("Password too long", width=280, relx=0.5, rely=0.94
+                            , anchor="center")
+
+        else:
+
+            plain_password = self.confirm_password_entry.get()
+            hashed_password = bcrypt.hashpw(confirmed_password, bcrypt.gensalt()) #salt and hash the password
+            hashed_password_str = hashed_password.decode('utf-8') #convert raw byte hash pass into normal string text
+
+            try:
+                cursor.execute("""
+                    INSERT INTO users (username, password, password_hash) 
+                    VALUES (?, ?, ?);
+                """, (new_username,plain_password, hashed_password_str))
+                connection.commit()
+                print("User registered successfully.")
+                self.green_frame = customtkinter.CTkFrame(self, width=169, height=32,
+                                                        corner_radius=5, border_color="green", border_width=2)
+                self.green_frame.place(relx=0.5, rely=0.94, anchor="center")
+
+                self.success_label = customtkinter.CTkLabel(master=self.green_frame,
+                                                          text="Successfully registered!",
+                                                          font=("Comic Sans MS", 15),
+                                                          bg_color="transparent")
+                self.success_label.place(relx=0.5, rely=0.5, anchor="center")
+
+            except sqlite3.IntegrityError as e:
+                print(f"Error: {e}")
+            finally:
+                connection.close()
 
 
 
 # Run the app
+create_tables()
 app = PasswordManagerApp()
 app.mainloop()

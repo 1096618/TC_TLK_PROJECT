@@ -5,6 +5,8 @@ import sqlite3
 import bcrypt
 from cryptography.fernet import Fernet
 
+#import pyinstaller // download later
+
 
 connection = sqlite3.connect('TC_Password_Manager.db')
 cursor = connection.cursor()
@@ -49,7 +51,7 @@ class PasswordManagerApp(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         # App thing
-        self.geometry("450x580")
+        self.geometry("480x614") #450x580
         self.title("Password Manager")
         self.resizable(False, False)
 
@@ -86,7 +88,7 @@ class PasswordManagerApp(customtkinter.CTk):
                                                           , fg_color="transparent")
         self.createaccount_label.configure(cursor="hand2")
         self.createaccount_label.bind("<Button-1>", self.create_account_clicked)
-        self.createaccount_label.place(relx=0.335, rely=0.76, anchor="center")
+        self.createaccount_label.place(relx=0.345, rely=0.76, anchor="center")
 
         # Login button
         login_button = customtkinter.CTkButton(self, text="Login", font=("Comic Sans MS", 25), width=250, height=50,
@@ -95,23 +97,30 @@ class PasswordManagerApp(customtkinter.CTk):
 
 
     def login_button_pressed(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-        print(f"Username entered: {username}")
-        print(f"Password entered: {password}")
-        if username == "test" and password == "test123":
-            print("correct username and password entered")
-            if hasattr(self, "red_frame") and self.red_frame.winfo_exists(): #if red frame exist delete
-                self.red_frame.destroy(), self.invalid_pass.destroy()
+        login_username = self.username_entry.get()
+        login_password = self.password_entry.get()
 
+        # delete error frame
+        if hasattr(self, "red_frame") and self.red_frame.winfo_exists():
+            self.red_frame.destroy()
+        if hasattr(self, "green_frame") and self.green_frame.winfo_exists():
+            self.green_frame.destroy()
+
+        if not login_username or not login_password:
+            self.show_error("Please enter all fields", width=160, relx=0.5, rely=0.94, anchor="center")
+        elif len(login_username) < 3:
+            self.show_error("Username too short", width=145, relx=0.5, rely=0.94, anchor="center")
         else:
-            #     create red frame and label saying invalid password
-            self.red_frame = customtkinter.CTkFrame(self, width=150, height=32
-                                                    , corner_radius=5, border_color="red", border_width=2)
-            self.red_frame.place(relx=0.5, rely=0.94, anchor="center")
-            self.invalid_pass =customtkinter.CTkLabel(master = self.red_frame, text="Invalid password"
-                                                      , font=("Comic Sans MS", 15), bg_color="transparent")
-            self.invalid_pass.place(relx=0.5, rely=0.5, anchor="center")
+            cursor.execute("SELECT password_hash FROM users WHERE username = ?", (login_username,))
+            row = cursor.fetchone()
+
+            if row and bcrypt.checkpw(login_password.encode(), row[0].encode()):
+                print("Login successful")
+                self.correct_frame("Login Successful", width=160, relx=0.5, rely=0.94, anchor="center")
+            else:
+                self.show_error("Invalid password or username", width=208, relx=0.5
+                                                                       , rely=0.94, anchor="center")
+
 
     def create_account_clicked(self, event):
         print("create new account clicked")
@@ -218,6 +227,21 @@ class PasswordManagerApp(customtkinter.CTk):
                                                   bg_color="transparent")
         self.error_label.place(relx=0.5, rely=0.5, anchor="center")
 
+    def correct_frame(self, message, width=320, relx=0.5, rely=0.94, anchor="center"):
+        if hasattr(self, "green_frame") and self.green_frame.winfo_exists():
+            self.green_frame.destroy()
+
+        self.green_frame = customtkinter.CTkFrame(self, width=width, height=32,
+                                                  corner_radius=5, border_color="green", border_width=2)
+        self.green_frame.place(relx=relx, rely=rely, anchor=anchor)
+
+        self.success_label = customtkinter.CTkLabel(master=self.green_frame,
+                                                    text=message,
+                                                    font=("Comic Sans MS", 15),
+                                                    bg_color="transparent")
+        self.success_label.place(relx=0.5, rely=0.5, anchor="center")
+
+
     def create_account_button_pressed(self):
         print("create account button pressed")
         new_username = self.create_username_entry.get()
@@ -241,11 +265,12 @@ class PasswordManagerApp(customtkinter.CTk):
                             , anchor="center")
 
         else:
-
+            #      SALT AND HASH PASSWORD
             plain_password = self.confirm_password_entry.get()
             hashed_password = bcrypt.hashpw(confirmed_password, bcrypt.gensalt()) #salt and hash the password
             hashed_password_str = hashed_password.decode('utf-8') #convert raw byte hash pass into normal string text
 
+            #     INPUTTING USER INFO INTO DATABASE
             try:
                 cursor.execute("""
                     INSERT INTO users (username, password, password_hash) 
@@ -253,15 +278,8 @@ class PasswordManagerApp(customtkinter.CTk):
                 """, (new_username,plain_password, hashed_password_str))
                 connection.commit()
                 print("User registered successfully.")
-                self.green_frame = customtkinter.CTkFrame(self, width=169, height=32,
-                                                        corner_radius=5, border_color="green", border_width=2)
-                self.green_frame.place(relx=0.5, rely=0.94, anchor="center")
-
-                self.success_label = customtkinter.CTkLabel(master=self.green_frame,
-                                                          text="Successfully registered!",
-                                                          font=("Comic Sans MS", 15),
-                                                          bg_color="transparent")
-                self.success_label.place(relx=0.5, rely=0.5, anchor="center")
+                self.correct_frame("User registered successfully.", width=208, relx=0.5
+                                    , rely=0.94, anchor="center")
 
             except sqlite3.IntegrityError as e:
                 print(f"Error: {e}")

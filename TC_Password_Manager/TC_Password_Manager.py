@@ -9,6 +9,7 @@ import atexit
 from cryptography.fernet import Fernet
 import time
 
+from PIL import Image, ImageTk
 #import pyinstaller // download later
 
 
@@ -305,17 +306,17 @@ class PasswordManagerApp(customtkinter.CTk):
 
     def main_menu(self):
         print("main menu")
-        #top frame
+        # top frame
         self.top_bar()
 
     def top_bar(self):
         self.top_frame = customtkinter.CTkFrame(self, width=480, height=52, fg_color="#2c2c2c", corner_radius=0)
         self.top_frame.place(relx=0.5, rely=0, anchor="n")
         
-        #text shennanigan
+        #=========================text shennanigan============================================================
         self.text_widget = tkinter.Text(self.top_frame,
-                                        font=("Consolas", 20),
-                                        height=2,  # height of widget box
+                                        font=("Consolas", 28),
+                                        height=1,  # height of widget box
                                         width=40,  # width of widget box
                                         bd=0,  # border = 0 aka off
                                         highlightthickness=0,  # remove highlight border
@@ -324,7 +325,8 @@ class PasswordManagerApp(customtkinter.CTk):
                                         insertbackground="white",  # fixed cursor color
                                         selectbackground="#555555"  # fixed selection background
                                         )
-        self.text_widget.place(relx=0.5, anchor="n")
+        # PLACEMENT
+        self.text_widget.place(relx=0.5, rely=0.5, anchor="center")
         self.text_widget.configure(state="disabled")
 
         #variable for animation typing
@@ -335,6 +337,13 @@ class PasswordManagerApp(customtkinter.CTk):
         self.current_index = 0
 
         #self.typing_text(text,keyword,keycolor,keyword_styles=[])
+        self.typing_text("Hello User",
+                         "User",
+                         "green",
+                         keyword_styles=["bold", "italic", "underline"]
+                         )
+
+    # =====================================================================================
 
     def typing_text(self,text, keyword, keycolor, keyword_styles):
         self.full_text = text
@@ -342,8 +351,64 @@ class PasswordManagerApp(customtkinter.CTk):
         self.keycolor = keycolor
         self.keyword_styles = keyword_styles or []
         self.current_index = 0
-        
 
+        self.text_widget.configure(state="normal") #enable text box edit
+        self.text_widget.delete("1.0", tkinter.END)
+        self.text_widget.configure(state="disabled") #disabled text box edit
+
+        # configure the font for the keyword with styles
+        base_font = font.Font(font=self.text_widget["font"])
+        weight = "bold" if "bold" in self.keyword_styles else "normal"
+        slant = "italic" if "italic" in self.keyword_styles else "normal"
+        underline = 1 if "underline" in self.keyword_styles else 0
+
+        styled_font = font.Font(
+            family=base_font.actual("family"), #get font from base font from text widget aka consolas
+            size=base_font.actual("size"), #same thing as above
+            weight=weight,
+            slant=slant,
+            underline=underline,
+        )
+
+        # Configure the highlight tag before animation starts
+        self.text_widget.tag_configure("highlight", foreground=self.keycolor, font=styled_font)
+
+        # delay till start typing
+        self.after(100, self.type_next_character)
+
+    def type_next_character(self):
+        if self.current_index < len(self.full_text): #keep writing till current char match full length of text
+            self.text_widget.configure(state="normal")
+            next_char = self.full_text[self.current_index]
+            self.text_widget.insert(tkinter.END, next_char)
+
+            # Apply center alignment tag
+            self.text_widget.tag_configure("center", justify="center")
+            self.text_widget.tag_add("center", "1.0", "end")
+
+            # Highlight keyword
+            current_text = self.text_widget.get("1.0", tkinter.END) #get the full text from beginning to end text
+            start = current_text.find(self.keyword) # if found keyword bind start and set it as pos of keyword else -1
+            if start != -1:
+                start_index = f"1.0 + {start} chars" #start index is from line 1 character 0 + pos of keyword
+                end_index = f"1.0 + {start + len(self.keyword)} chars" #same thing + length
+                self.text_widget.tag_remove("highlight", "1.0", tkinter.END) #remove tag if alr exist
+                self.text_widget.tag_add("highlight", start_index, end_index) #add it
+
+            self.text_widget.configure(state="disabled")
+            self.current_index += 1
+            self.after(100, self.type_next_character) #speed of typing animation
+
+        else:
+            self.text_widget.configure(state="disabled") #disable edit mode
+            self.text_widget.configure(insertontime=0)  # hide blinking cursor
+            self.text_widget.configure(cursor="arrow")  # change cursor to arrow
+
+            # literally disabled every single cursor type when hover over text box
+            self.text_widget.bind("<Button-1>", lambda e: "break")
+            self.text_widget.bind("<B1-Motion>", lambda e: "break")
+            self.text_widget.bind("<Double-Button-1>", lambda e: "break")
+            self.text_widget.bind("<Triple-Button-1>", lambda e: "break")
 
 
 # Run the app

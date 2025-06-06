@@ -6,6 +6,7 @@ from tkinter import font
 import sqlite3
 import bcrypt
 import atexit
+import os
 from cryptography.fernet import Fernet
 import time
 
@@ -343,7 +344,67 @@ class PasswordManagerApp(customtkinter.CTk):
                          keyword_styles=["bold", "italic", "underline"]
                          )
 
-    # =====================================================================================
+        # =====================================================================================
+
+        # menu icon
+        image_path = "Assets/menu_icon2.png"  # Replace with your image file path
+        pil_image = Image.open(image_path)
+        if not os.path.exists(image_path):
+            print("Image not found:", image_path)
+
+        self.menu_icon_object = customtkinter.CTkImage(light_image=pil_image, dark_image=pil_image, size=(52, 52))
+        self.menu_icon = customtkinter.CTkLabel(self.top_frame, image=self.menu_icon_object, text="")
+        self.menu_icon.place(relx=0, rely=0.02, anchor="nw")
+        self.menu_icon.bind("<Button-1>", self.toggle_dropdown)
+
+
+        # Dropdown frame - start collapsed with height=0
+        self.dropdown_frame = customtkinter.CTkFrame(self, width=52, height=0, fg_color="#2c2c2c")
+        self.dropdown_frame.pack_propagate(False)  # Important: prevent auto resize
+        self.dropdown_frame.place(relx=0, rely=0.08, anchor="nw")
+        self.dropdown_frame.lower()
+
+        # Add some content inside dropdown frame (hidden initially)
+        self.label1 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 1", fg_color="#555555", corner_radius=5)
+        self.label2 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 2", fg_color="#555555", corner_radius=5)
+        self.label3 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 3", fg_color="#555555", corner_radius=5)
+        # Pack but initially invisible because frame height=0
+        for lbl in (self.label1, self.label2, self.label3):
+            lbl.pack(fill="x", padx=10, pady=5)
+
+        # State
+        self.is_expanded = False
+        self.current_height = 0
+        self.target_height = 150  # final height in pixels
+        self.step = 10  # pixels to expand per animation step
+
+    def toggle_dropdown(self,event):
+        if self.is_expanded:
+            self.collapse()
+        else:
+            self.expand()
+
+    def expand(self):
+        if self.current_height < self.target_height:
+            self.current_height += self.step
+            if self.current_height > self.target_height:
+                self.current_height = self.target_height
+            self.dropdown_frame.configure(height=self.current_height)
+            self.after(20, self.expand)  # call again after 20ms for smooth animation
+        else:
+            self.is_expanded = True
+            #self.toggle_btn.configure(text="Toggle Dropdown ▲")
+
+    def collapse(self):
+        if self.current_height > 0:
+            self.current_height -= self.step
+            if self.current_height < 0:
+                self.current_height = 0
+            self.dropdown_frame.configure(height=self.current_height)
+            self.after(20, self.collapse)
+        else:
+            self.is_expanded = False
+            #self.toggle_btn.configure(text="Toggle Dropdown ▼")
 
     def typing_text(self,text, keyword, keycolor, keyword_styles):
         self.full_text = text

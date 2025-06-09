@@ -347,15 +347,28 @@ class PasswordManagerApp(customtkinter.CTk):
         # =====================================================================================
 
         # menu icon
-        image_path = "Assets/menu_icon2.png"  # Replace with your image file path
-        pil_image = Image.open(image_path)
-        if not os.path.exists(image_path):
-            print("Image not found:", image_path)
+        menu_icon = "Assets/menu_icon2.png"  # Replace with your image file path
+        pil_menu_image = Image.open(menu_icon)
+        if not os.path.exists(menu_icon):
+            print("Image not found:", menu_icon)
 
-        self.menu_icon_object = customtkinter.CTkImage(light_image=pil_image, dark_image=pil_image, size=(52, 52))
+        # vault icon
+        vault_icon = "Assets/vault_icon.png"  # Replace with your image file path
+        pil_vault_image = Image.open(vault_icon)
+        if not os.path.exists(vault_icon):
+            print("Image not found:", vault_icon)
+
+        #image object:
+        #   menu object
+        self.menu_icon_object = customtkinter.CTkImage(light_image=pil_menu_image, dark_image=pil_menu_image
+                                                       , size=(52, 52))
         self.menu_icon = customtkinter.CTkLabel(self.top_frame, image=self.menu_icon_object, text="")
         self.menu_icon.place(relx=0, rely=0.02, anchor="nw")
         self.menu_icon.bind("<Button-1>", self.toggle_dropdown)
+
+        #   vault object
+        self.vault_icon_object = customtkinter.CTkImage(light_image=pil_vault_image, dark_image=pil_vault_image
+                                                       , size=(38, 32))
 
 
         # Dropdown frame - start collapsed with height=0
@@ -365,12 +378,17 @@ class PasswordManagerApp(customtkinter.CTk):
         self.dropdown_frame.lower()
 
         # Add some content inside dropdown frame (hidden initially)
-        self.label1 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 1", fg_color="#555555", corner_radius=5)
-        self.label2 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 2", fg_color="#555555", corner_radius=5)
-        self.label3 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 3", fg_color="#555555", corner_radius=5)
+        self.menu_label1 = customtkinter.CTkLabel(self.dropdown_frame,image=self.vault_icon_object , text=""
+                                                  , fg_color="#555555", corner_radius=5)
+        self.menu_label1.bind("<Button-1>", self.toggle_dropdown)
+
+        self.vault_label2 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 2"
+                                                   , fg_color="#555555", corner_radius=5)
+        self.setting_label3 = customtkinter.CTkLabel(self.dropdown_frame, text="Item 3"
+                                                     , fg_color="#555555", corner_radius=5)
         # Pack but initially invisible because frame height=0
-        for lbl in (self.label1, self.label2, self.label3):
-            lbl.pack(fill="x", padx=10, pady=5)
+        for lbl in (self.menu_label1, self.vault_label2, self.setting_label3):
+            lbl.pack(fill="x", padx=10, pady=10)
 
         # State
         self.is_expanded = False
@@ -470,6 +488,8 @@ class PasswordManagerApp(customtkinter.CTk):
             self.text_widget.bind("<B1-Motion>", lambda e: "break")
             self.text_widget.bind("<Double-Button-1>", lambda e: "break")
             self.text_widget.bind("<Triple-Button-1>", lambda e: "break")
+
+    def vault_view(self,event):
 
 
 # Run the app
